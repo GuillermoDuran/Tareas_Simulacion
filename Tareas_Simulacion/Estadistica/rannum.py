@@ -40,11 +40,11 @@ class RandNum(QMainWindow):
         self.dropDown.resize(200, 50)
 
         self.genBtn = QPushButton("Generar")
-        self.genBtn.clicked.connect(lambda: option(self))  
+        self.genBtn.clicked.connect(lambda: self.option())  
         self.genBtn.resize(100, 50)
 
         self.newBtn = QPushButton("New")
-        self.newBtn.clicked.connect(lambda: clearLayout(self))
+        self.newBtn.clicked.connect(lambda: self.clearLayout())
 
         self.hLayout = QHBoxLayout()
         self.hLayout.addWidget(self.dropDown)
@@ -74,105 +74,105 @@ class RandNum(QMainWindow):
 
         self.setCentralWidget(self.centralwidget)
 
-def option(self):
-    option = self.dropDown.currentText()
-    
-    if option == "Cuadrados Medios":
-        cuadradosMediosInput(self)
-    elif option == "Congruencial Lineal":
-        cuadradosMediosInput(self)
+    def option(self):
+        option = self.dropDown.currentText()
+        
+        if option == "Cuadrados Medios":
+            self.cuadradosMediosInput()
+        elif option == "Congruencial Lineal":
+            self.cuadradosMediosInput()
 
-def cuadradosMediosInput(self):
-    clearLayout(self)
-    
-    lableSeed = QLabel("Ingrese una semilla: ")
-    lineSeed = QLineEdit()
+    def cuadradosMediosInput(self):
+        self.clearLayout()
+        
+        lableSeed = QLabel("Ingrese una semilla: ")
+        lineSeed = QLineEdit()
 
-    hLayout = QHBoxLayout()
-    hLayout.addWidget(lableSeed)
-    hLayout.addWidget(lineSeed)
-    hWidget = QWidget()
-    hWidget.setLayout(hLayout)
+        hLayout = QHBoxLayout()
+        hLayout.addWidget(lableSeed)
+        hLayout.addWidget(lineSeed)
+        hWidget = QWidget()
+        hWidget.setLayout(hLayout)
 
-    lableQtty = QLabel("Ingrese una cantidad: ")
-    lineQtty = QLineEdit()
-    btnInput = QPushButton("Ok") 
-    btnInput.clicked.connect(lambda: cuadradosMediosOutput(self, int(lineQtty.text()), int(lineSeed.text())))
+        lableQtty = QLabel("Ingrese una cantidad: ")
+        lineQtty = QLineEdit()
+        btnInput = QPushButton("Ok") 
+        btnInput.clicked.connect(lambda: self.cuadradosMediosOutput(int(lineQtty.text()), int(lineSeed.text())))
 
-    hLayout2 = QHBoxLayout()
-    hLayout2.addWidget(lableQtty)
-    hLayout2.addWidget(lineQtty)
-    hLayout2.addWidget(btnInput)
-    hWidget2 = QWidget()
-    hWidget2.setLayout(hLayout2)
+        hLayout2 = QHBoxLayout()
+        hLayout2.addWidget(lableQtty)
+        hLayout2.addWidget(lineQtty)
+        hLayout2.addWidget(btnInput)
+        hWidget2 = QWidget()
+        hWidget2.setLayout(hLayout2)
 
-    self.vLayout.addWidget(hWidget)    
-    self.vLayout.addWidget(hWidget2)
-    self.vLayout.addStretch()    
+        self.vLayout.addWidget(hWidget)    
+        self.vLayout.addWidget(hWidget2)
+        self.vLayout.addStretch()    
 
-def cuadradosMediosOutput(self, qtty, seed):
-   # Método de los cuadrados medios
-    n=qtty
-    #r=7182
-    # seleccionamos el valor inicial r
-    r=seed
-    # seleccionamos el valor inicial r
-    l=len(str(r))
-    # determinamos el número de dígitos
-    lista = []
-    # almacenamos en una lista
-    lista2 = []
-    i=1
-    #while len(lista) == len(set(lista)):
-    while i < n:
-        x=str(r*r)
-        # Elevamos al cuadrado r
-        if l % 2 == 0:
-            x = x.zfill(l*2)
-        else:
-            x = x.zfill(l)
-        y=(len(x)-l)/2
-        y=int(y)
-        r=int(x[y:y+l])
-        lista.append(r)
-        lista2.append(x)
-        i=i+1
-    df = pd.DataFrame({'X2':lista2,'Xi':lista})
-    dfrac = df["Xi"]/10**l
-    df["ri"] = dfrac
-    #df.head()
-    df 
+    def cuadradosMediosOutput(self, qtty, seed):
+    # Método de los cuadrados medios
+        n=qtty
+        #r=7182
+        # seleccionamos el valor inicial r
+        r=seed
+        # seleccionamos el valor inicial r
+        l=len(str(r))
+        # determinamos el número de dígitos
+        lista = []
+        # almacenamos en una lista
+        lista2 = []
+        i=1
+        #while len(lista) == len(set(lista)):
+        while i < n:
+            x=str(r*r)
+            # Elevamos al cuadrado r
+            if l % 2 == 0:
+                x = x.zfill(l*2)
+            else:
+                x = x.zfill(l)
+            y=(len(x)-l)/2
+            y=int(y)
+            r=int(x[y:y+l])
+            lista.append(r)
+            lista2.append(x)
+            i=i+1
+        df = pd.DataFrame({'X2':lista2,'Xi':lista})
+        dfrac = df["Xi"]/10**l
+        df["ri"] = dfrac
+        #df.head()
+        df 
 
-    model = mod(df)
-    table = QTableView()
-    table.setMinimumSize(750, 200)
-    table.setMaximumSize(750, 200)
-    table.setModel(model)
+        model = mod(df)
+        table = QTableView()
+        table.setMinimumSize(750, 200)
+        table.setMaximumSize(750, 200)
+        table.setModel(model)
 
-    figure = plt.figure(figsize=(12,8))
-    x1=df['ri']
-    plt.plot(x1)
-    plt.title('Generador de Numeros Aleatorios Cuadrados Medios')
-    plt.xlabel('Serie')
-    plt.ylabel('Aleatorios')
-    canvas = FigureCanvasQTAgg(figure)
-    toolbar = NavigationToolbar2QT(canvas, self)
-    canvLayout = QVBoxLayout()
-    canvLayout.addWidget(toolbar)
-    canvLayout.addWidget(canvas)
-    canvasElmt = QWidget()
-    canvasElmt.setLayout(canvLayout)
-    canvasElmt.setMinimumSize(300, 480) 
+        figure = plt.figure(figsize=(12,8))
+        x1=df['ri']
+        plt.plot(x1)
+        plt.title('Generador de Numeros Aleatorios Cuadrados Medios')
+        plt.xlabel('Serie')
+        plt.ylabel('Aleatorios')
+        canvas = FigureCanvasQTAgg(figure)
+        toolbar = NavigationToolbar2QT(canvas, self)
+        canvLayout = QVBoxLayout()
+        canvLayout.addWidget(toolbar)
+        canvLayout.addWidget(canvas)
+        canvasElmt = QWidget()
+        canvasElmt.setLayout(canvLayout)
+        canvasElmt.setMinimumSize(300, 480) 
 
-    self.vLayout.addWidget(table)
-    self.vLayout.addWidget(canvasElmt)
+        self.vLayout.addWidget(table)
+        self.vLayout.addWidget(canvasElmt)
 
-def clearLayout(self):
-    for i in reversed(range(self.vLayout.count())): 
-        if self.vLayout.itemAt(i).widget() is not None:
-            self.vLayout.itemAt(i).widget().deleteLater()
-        elif self.vLayout.itemAt(i).widget() is None:
-            self.vLayout.removeItem(self.vLayout.itemAt(i))
+    def clearLayout(self):
+        for i in reversed(range(self.vLayout.count())): 
+            if self.vLayout.itemAt(i).widget() is not None:
+                self.vLayout.itemAt(i).widget().deleteLater()
+            elif self.vLayout.itemAt(i).widget() is None:
+                self.vLayout.removeItem(self.vLayout.itemAt(i))
 
 if __name__ == "__main__":
     import sys

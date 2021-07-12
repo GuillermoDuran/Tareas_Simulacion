@@ -14,6 +14,7 @@ from pandas.core.accessor import PandasDelegate
 import sys
 
 import stats
+import rannum
 
 class Ui_Main(QWidget):
 
@@ -33,10 +34,11 @@ class Ui_Main(QWidget):
 
         self.statsButton = QPushButton('Estadística', self.centralwidget)
         self.statsButton.setMaximumSize(btnSize)
-        self.statsButton.clicked.connect(lambda: openStats(self))
+        self.statsButton.clicked.connect(lambda: self.openStats())
 
         self.randButton = QPushButton('Aleatorios', self.centralwidget)
         self.randButton.setMaximumSize(btnSize)
+        self.randButton.clicked.connect(lambda: self.openRand())
 
         self.layout = QHBoxLayout(self.centralwidget)
         self.layout.addWidget(self.statsButton)
@@ -46,10 +48,13 @@ class Ui_Main(QWidget):
         MainWindow.setCentralWidget(self.centralwidget)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-def openStats(self):
-    stats
-    self.secondWindow = stats.Ui_MainWindow()
-    self.secondWindow.show()
+    def openStats(self):
+        self.secondWindow = stats.Ui_Stats()
+        self.secondWindow.show()
+
+    def openRand(self):
+        self.secondWindow = rannum.RandNum()
+        self.secondWindow.show()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
