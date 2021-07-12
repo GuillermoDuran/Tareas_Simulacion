@@ -14,13 +14,14 @@ from pandas.core.accessor import PandasDelegate
 
 import dfModel
 
-#GUI
-class Ui_MainWindow(QMainWindow):
+mod = dfModel.DataFrameModel
+
+class Ui_Stats(QMainWindow):
     datos = ""
     conjuntoDatos = ""
 
-    def __init__(self, ):
-        super(Ui_MainWindow, self).__init__()
+    def __init__(self):
+        super(Ui_Stats, self).__init__()
         global conjuntoDatos 
         conjuntoDatos = []
         self.resize(813, 700)
@@ -101,7 +102,6 @@ class Ui_MainWindow(QMainWindow):
         scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         scrollArea.setWidgetResizable(True)
         self.outlayout = QVBoxLayout()
-        #self.outlayout.stretch(1)
         self.outlayout.addWidget(scrollArea)
         self.outerGroupBox.setLayout(self.outlayout)
         self.layout = QVBoxLayout()
@@ -131,7 +131,7 @@ class Ui_MainWindow(QMainWindow):
         global datos
         datos = pd.read_csv(self.lineFileName.text())
 
-        model = dfModel.DataFrameModel(datos)
+        model = mod(datos)
         table = QtWidgets.QTableView(parent=self)
         table.setMinimumSize(750, 200)
         table.setMaximumSize(750, 200)
@@ -277,6 +277,6 @@ class Ui_MainWindow(QMainWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    ui = Ui_MainWindow()
+    ui = Ui_Stats()
     ui.show()
     sys.exit(app.exec_())
